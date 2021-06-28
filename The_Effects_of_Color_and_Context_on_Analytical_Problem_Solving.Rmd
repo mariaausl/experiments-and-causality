@@ -254,7 +254,7 @@ shared_df=rbind(df1,df2)
 ### Pilot Study Results
 
 ```{r pilot response rate,include=FALSE}
-#repsonse rate per question
+#response rate per question
 for (n in 1:3) {
   response_rate<-length(df1[df1$question_number==n & df1$answer!="",]$answer)/length(df1[df1$question_number==n,]$answer)
   print(glue("Question {n}"))
@@ -335,7 +335,7 @@ After assessing results on the question level to determine which questions are a
 * color ~ education
 * context condition ~ education
 
-There is no reason to believe randomization of treatment conditions would be affected by Qualtrics software, Prolific or Google Surveys, however, because we did not design the software ourselves, we've decided to check covariates have no effect on treatments assigned. The models described for gender are listed below, showing no significant effects of covariates on treatment conditions. The models for age and education are in A11 of the appendix. As with the gender models, no covariates had a significant effect on the treatment conditions assigned.
+There is no reason to believe randomization of treatment conditions would be affected by Qualtrics software, Prolific or Google Surveys, however, because we did not design the software ourselves, we've decided to check that covariates have no effect on treatments assigned. The models described for gender are listed below, showing no significant effects of covariates on treatment conditions. The models for age and education are in A11 of the appendix. As with the gender models, no covariates had a significant effect on the treatment conditions assigned.
 
 ```{r,echo=FALSE}
 for (cov in c('gender')) {
@@ -350,7 +350,7 @@ for (cov in c('gender')) {
 
 Looking at the outcomes above, no covariates have a significant effect on treatment condition selection. We assume the randomization of treatment leads to expected balance on covariates.
 
-A short analysis of power based on pilot results is displayed below. However, the results in our pilot are not expected to perfectly match the results of the final study, particularly taking into account differences in outcomes (question score) by question number where the questions in the final study will not perfectly match those of the pilot. According to the results of the pilot study, in order to have 80% power, there will need to be about 430 samples per condition. In the final study, as many subjects as possible are recruited as according to budgetary constraints. The lines represent the point at which 80% power will be achieved.
+A short analysis of power based on pilot results is displayed below. However, the results in our pilot are not expected to perfectly match the results of the final study, particularly taking into account differences in outcomes (question score) by question number where the questions in the final study will not perfectly match those of the pilot. According to the results of the pilot study, in order to have 80% power, there will need to be about 430 samples per condition. In the final study, as many subjects as possible are recruited according to budgetary constraints. The lines represent the point at which 80% power will be achieved.
 
 ```{r,include=FALSE}
 
@@ -450,7 +450,7 @@ Based on the results of the pilot study, the final study was implemented using Q
 
 ### Outcome Measurement
 
-In this study, each question answered by a subject consists of an observation and whether the question is asnwered correctly or not is the measured outcome. In the analysis the outcome variable (a boolean indicating whether a question was answered correctly) is listed as `score`. Potential treatment conditions whose outcomes are assessed are listed below:
+In this study, each question answered by a subject consists of an observation and whether the question is answered correctly or not is the measured outcome. In the analysis the outcome variable (a boolean indicating whether a question was answered correctly) is listed as `score`. Potential treatment conditions whose outcomes are assessed are listed below:
 
 ```{r echo=FALSE}
 table <- data.frame(matrix(vector(), 2, 3,
@@ -614,8 +614,6 @@ setcolorder(dt, c("id", "score", "color", "cond1", "cond2", "cond3",
 
 
 # Exploratory Data Analysis (EDA)
-
-IN t clearly detailed, and the reader can understand at a conceptual and operational level.
 
 A total of `r dt[, uniqueN(id)]` unique respondents completed our survey on prolific, the demographic was skewed towards younger respondents spread across different education levels (and nationalities mainly European, led by UK, Poland, and Portuguese). (We also saw that roughly half of all respondents are currently students, more prominently in Poland and Portugal.)
 \newpage
@@ -899,7 +897,7 @@ This is an encouraging result of the treatment effect on the outcome 'score' and
 
 ## Framework for the analysis of results
 
-According to Gerber and Green (2012), "the allure of within-subject design is their capacity to generate precise treatment estimates with a single subject" (p 273). Within-subjects regression requires including individual subject level fixed effect (using id which is unique to each participant). In the EDA we discovered that the average scores for questions 5 and 6 are very high, so there may be a potential ceiling effects. To control for the differences in question number we decided to also incorporate question number as a fixed effect in the model. We also test for the presence of HTE by including a interaction term. We do this using the following hierarchy of linear models:
+According to Gerber and Green (2012), "the allure of within-subject design is their capacity to generate precise treatment estimates with a single subject" (p 273). Within-subjects regression requires including individual subject level fixed effects (using id which is unique to each participant). In the EDA we discovered that the average scores for questions 5 and 6 are very high, so there may be a potential ceiling effects. To control for the differences in question number we decided to also incorporate question number as a fixed effect in the model. We also test for the presence of HTE by including an interaction term. We do this using the following hierarchy of linear models:
 
 1. **Simple model**: outcome ~ Treatment conditions
 2. **Fixed effects model**: Outcome ~ Treat + Fixed Effects
@@ -908,7 +906,7 @@ According to Gerber and Green (2012), "the allure of within-subject design is th
 
 ## Statistical significance and reporting standard errors
 
-In within-subjects studies, “the key assumption is that the errors are uncorrelated across clusters while errors for individuals belonging to the same cluster may be correlated” (Cameron and Miller [2015], p. 320). Clustering is an experimental design feature because the outcome is correlated at the suject level since we observe the same individual's reponse to multiple questions, therefore we must cluster the results using subject id to ensure that the statistical significance of treatment effects are not overstated. The stargazer model results using clustered standard errors (clustered by id).
+In within-subjects studies, “the key assumption is that the errors are uncorrelated across clusters while errors for individuals belonging to the same cluster may be correlated” (Cameron and Miller [2015], p. 320). Clustering is an experimental design feature because the outcome is correlated at the subject level since we observe the same individual's reponse to multiple questions, therefore we must cluster the results using subject id to ensure that the statistical significance of treatment effects are not overstated. The stargazer model results using clustered standard errors (clustered by id).
 
 
 ```{r Analytical Framework models, include=FALSE}
@@ -955,7 +953,7 @@ stargazer(m1, m2, m3,
 
 ```
 
-Typically, the motivation given for the clustering adjustments is that unobserved components in outcomes for units within clusters are correlated. However, because correlation may occur across more than one dimension ( for e.g. subject id and question number). Clustering standard errors by both dimensions of 'id' and 'question number' will produce results under a more conservative reporting standard, ensuring that the significnace of the treatment effects are not overstated. We take the view that this second perspective best fits the experimental setting our of within-subjects study where clustering adjustments are used. Below, we present a stargazer output of the same hierarchy of linear models using clustered standard errors ( clustered by both id and question number).
+Typically, the motivation given for the clustering adjustments is that unobserved components in outcomes for units within clusters are correlated. However, because correlation may occur across more than one dimension ( for e.g. subject id and question number). Clustering standard errors by both dimensions of 'id' and 'question number' will produce results under a more conservative reporting standard, ensuring that the significance of the treatment effects are not overstated. We take the view that this second perspective best fits the experimental setting our of within-subjects study where clustering adjustments are used. Below, we present a stargazer output of the same hierarchy of linear models using clustered standard errors ( clustered by both id and question number).
 
 
 ```{r Stargazer result2, echo=FALSE}
@@ -993,8 +991,8 @@ stargazer(m1, m2, m3,
 **The findings of the analysis and the interpretation of the model results:**
 
 > 1. The 'simple model' shows that the treatment condition *3: Problem description with context and diagram* is statistically significant but the test is able to explain very little changes in outcome due to treatment  low adj. R-squared (~0%)
-> 2. The more complex 'Fixed effects model' correctly captures the within-subject variation at the participant levels and produces a etter fitting model with a higher adj. R-squared (37%) and a statistically significant treatment effect for condition 3. 
-> 3. The 'fully saturated model' which nests the 'fixed effects model' aims to test for additional interaction effects between the color and context treatment conditions. The model output shows that there is no heterogeneous treatment effect (HTE) between color and context and surprisingly also no statistically significant treatment effect when the interaction term is included in the model. This makes us skepticlal of the results from the simpler nested model and conclude that the potential treatments effects might not actually exist.  
+> 2. The more complex 'Fixed effects model' correctly captures the within-subject variation at the participant levels and produces a better fitting model with a higher adj. R-squared (37%) and a statistically significant treatment effect for condition 3. 
+> 3. The 'fully saturated model' which nests the 'fixed effects model' aims to test for additional interaction effects between the color and context treatment conditions. The model output shows that there is no heterogeneous treatment effect (HTE) between color and context and surprisingly also no statistically significant treatment effect when the interaction term is included in the model. This makes us skeptical of the results from the simpler nested model and conclude that the potential treatments effects might not actually exist.  
 > 4. We decided to re-run all 3 models with more stringent standard errors (clustered by both id and question number). To our surprise we found that none of the model results were statistically significant and the model inference is that none of the treatment effects are statistically significant.
 
 
@@ -1004,7 +1002,7 @@ Power analysis is an important aspect of experimental design. Statistical power 
 
 In general, within-subject design results in greater statistical power than between-subject designs as in within-subject designs, each participant receives multiple conditions or treatments. In our example, by having 2x3 or 6 types of questions or conditions, we get 1560 observations upon 260 participants. 
 
-Though it is true that we need fewer participants in a within-subject design in order to find statistically significant effects, the power of the study depends on the average ATE as well as the standard deviation of the ATE. The smaller the ATE and the larger the standard deviations, the lower the power of the test. Our test is under-powered due to the budgetary constraints. We are uncertain that we have enough power to detect any real treatment effects in this study. I would be ideal to collect more samples or add more questions in order to get a higher power for this experiment. In the below graph, blue lines represent the number of samples needed to have 80% power for our overall study, and the red lines delineate the current level of power in our study given the number of samples per treatment condition.
+Though it is true that we need fewer participants in a within-subject design in order to find statistically significant effects, the power of the study depends on the average ATE as well as the standard deviation of the ATE. The smaller the ATE and the larger the standard deviations, the lower the power of the test. Our test is under-powered due to the budgetary constraints. We are uncertain that we have enough power to detect any real treatment effects in this study. It would be ideal to collect more samples or add more questions in order to get a higher power for this experiment. In the below graph, blue lines represent the number of samples needed to have 80% power for our overall study, and the red lines delineate the current level of power in our study given the number of samples per treatment condition.
 
 ```{r, include=FALSE}
 
@@ -1101,7 +1099,7 @@ We account for “carryover effect” and “learning effect” by using counter
 
 # Generalizability concerns
 
-One factor that can affect the usefulness of our study, regardless of the strength of the design, is its generalizability. We believe the results of our study can be generalized across a large population but it's restricted to a very specific condition of analytical questions. We would be careful about extending the finding of the study outside the scope of the conditions in the context of online learning application. For e.g., the study results would be difficult to extend to reading comprehension or other non-analytical problems since the diagram and context conditions are not easily applicable beyond the specific scope of the analytical problems which we tested.
+One factor that can affect the usefulness of our study, regardless of the strength of the design, is its generalizability. We believe the results of our study can be generalized across a large population but it's restricted to a very specific condition of analytical questions. We would be careful about extending the finding of the study outside the scope of the conditions in the context of online learning applications. For e.g., the study results would be difficult to extend to reading comprehension or other non-analytical problems since the diagram and context conditions are not easily applicable beyond the specific scope of the analytical problems which we tested.
 
 
 # Conclusion
