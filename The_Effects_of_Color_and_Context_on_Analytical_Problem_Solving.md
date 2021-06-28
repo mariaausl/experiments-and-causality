@@ -255,7 +255,7 @@ to avoid ceiling effects it would be best if the proportion of subjects
 who answered a question correctly at around 50% and the proportion of
 subjects who answered a question incorrectly at around 50% as well.
 Looking at the table below, we do not see any overt cases for a question
-having a ceiling or floor effect (\<20% correct or \<20% correct).
+having a ceiling or floor effect (\>80% correct or \<20% correct).
 However, question 1 in study 1 has a fairly low percentage of subjects
 who’ve answered the question correctly (26.92 %) and question 3 in study
 2 has a fairly high percentage of subjects who’ve answered the question
